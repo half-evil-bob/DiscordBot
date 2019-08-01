@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 
 const client = new Discord.Client();
+const token = 'NTk1Njk4NzY2NjM2NTE1Mzg1.XUJI9g.csNG2wFZZg2cgp41ZntygMyt1dI';
 
 client.on('ready', () => {
   console.log("I'm in");
@@ -8,7 +9,8 @@ console.log(client.user.username);
 
 });
 
-var countDownDate = new Date("August 25 2019 15:33:00").getTime();
+var countDownDate = new Date("August 3 2019 13:40:30").getTime();
+pastDrop = 0
 
 var timer = setInterval(myTimer, 1000);
 function myTimer() {
@@ -23,32 +25,32 @@ function myTimer() {
     if (distance < 0) {
         client.channels.find(x => x.name === 'bottest').send('@everyone\nTHE SITE IS UP GO AND COP!!!\nhttps://halfevilco.com/%27');
         var timerPast = setInterval(upTime, 1000);
+        clearInterval(timer);
     }
     
 };
 function upTime() {
-    clearInterval(timer);
 
     var now = new Date().getTime();
-    pastDrop = distance + now;
+    pastDrop = now - countDownDate;
     days = Math.floor(pastDrop / (1000 * 60 * 60 * 24));
     hours = Math.floor((pastDrop % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     minutes = Math.floor((pastDrop % (1000 * 60 * 60)) / (1000 * 60));
     seconds = Math.floor((pastDrop % (1000 * 60)) / 1000);
-    console.log(pastDrop)
 };
 
 
 client.on('message', (msg) => {
     if (msg.content === '!drop') {
-        if (distance > 0) {
+        if (distance < 0) {
             msg.channel.send(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
         }
         else if (pastDrop > 0) {
-            msg.channel.send(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+            msg.channel.send(`THE SITE IS UP ${msg.author}! GO AND COP!!!\nhttps://halfevilco.com/%27\nHas been up for: `+days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
         }
-        else{
-            client.channels.find(x => x.name === 'bottest').send(`THE SITE IS UP ${msg.author}! GO AND COP!!!\nhttps://halfevilco.com/%27`);
+        else {
+            msg.channel.send(`Error Please try again!\nIf this continues contact @Dusty#4303! @ya hungry?#5615 `);
+            console.log(client.id)
         }
     }
 });
