@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 
 const client = new Discord.Client();
-const token = 'NTk1Njk4NzY2NjM2NTE1Mzg1.XUJI9g.csNG2wFZZg2cgp41ZntygMyt1dI';
+const token = 'NTk1Njk4NzY2NjM2NTE1Mzg1.XUNHiw.rEg0xcfZX2dJCL8o5gbdBFMLzr4';
 
 client.on('ready', () => {
   console.log("I'm in");
@@ -9,13 +9,20 @@ console.log(client.user.username);
 
 });
 
-var countDownDate = new Date("August 3 2019 13:40:30").getTime();
-pastDrop = 0
+var ChangeDate = new Date("August 25 2019 15:33:00");
+var localTime = ChangeDate.getTime();
+var localOffset = ChangeDate.getTimezoneOffset() * 60000;
+var utc = localTime + localOffset;
+var offset = -5;   
+var addOfset = utc + (3600000*offset);
+countDownDate = new Date(addOfset); 
 
 var timer = setInterval(myTimer, 1000);
 function myTimer() {
     var now = new Date().getTime();
     distance = countDownDate - now;
+
+    pastDrop = 0;
 
     days = Math.floor(distance / (1000 * 60 * 60 * 24));
     hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -23,7 +30,7 @@ function myTimer() {
     seconds = Math.floor((distance % (1000 * 60)) / 1000);
     
     if (distance < 0) {
-        client.channels.find(x => x.name === 'bottest').send('@everyone\nTHE SITE IS UP GO AND COP!!!\nhttps://halfevilco.com/%27');
+        client.channels.find(x => x.name === 'bot-announcements').send('@everyone\nTHE SITE IS UP GO AND COP!!!\nhttps://halfevilco.com/%27');
         var timerPast = setInterval(upTime, 1000);
         clearInterval(timer);
     }
@@ -39,21 +46,37 @@ function upTime() {
     seconds = Math.floor((pastDrop % (1000 * 60)) / 1000);
 };
 
+function currentChicagoTime() {
+    let chTime = new Date().toLocaleTimeString("en-US", {
+        timeZone: "America/Chicago"
+      })
+      
+    return chTime
+}
+
+function currentLocalTime() {
+    let outTime = new Date().toLocaleTimeString();
+
+    return outTime
+}
+
 
 client.on('message', (msg) => {
+    if (msg.content === '!time') {
+        msg.channel.send(`${msg.author}, \nYour Local Time: ` + currentLocalTime() + '\n\nChicago Local Time: '+ currentChicagoTime());
+          //msg.channel.send('Hello: '+cTime('London','+1'));
+    }
     if (msg.content === '!drop') {
-        if (distance < 0) {
-            msg.channel.send(days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+        if (distance > 0) {
+            msg.channel.send(`${msg.author}, The Next Half-Evil Drop Is In: `+ days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
         }
         else if (pastDrop > 0) {
-            msg.channel.send(`THE SITE IS UP ${msg.author}! GO AND COP!!!\nhttps://halfevilco.com/%27\nHas been up for: `+days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
+            msg.channel.send(`${msg.author}, THE SITE IS UP! GO AND COP!!!\nhttps://halfevilco.com/%27\nHas been up for: `+days + "d " + hours + "h " + minutes + "m " + seconds + "s ");
         }
         else {
-            msg.channel.send(`Error Please try again!\nIf this continues contact @Dusty#4303! @ya hungry?#5615 `);
-            console.log(client.id)
+            msg.channel.send('Error Please try again!\nIf this continues contact ' + msg.client.users.get('163899650607153152')+ ' and ' + msg.client.users.get('134874483008733184'));
         }
     }
 });
-client.login(token);
 
-//msg.channel.send(`Hello ${msg.author}!`);
+client.login(token);
